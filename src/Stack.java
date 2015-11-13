@@ -35,7 +35,7 @@ public class Stack<T>
         {
             Node temp = first;
             first = new Node(entry);
-            first.next = temp;
+            first.setNextNode(temp);
         }
     }
     
@@ -48,8 +48,8 @@ public class Stack<T>
         if (isEmpty())
             return null;
         
-        T result = first.element;
-        first = first.next;
+        T result = first.getData();
+        first = first.getNextNode();
         return result;
     }
     
@@ -62,35 +62,8 @@ public class Stack<T>
         if (isEmpty())
             return null;
         
-        return first.element;
+        return first.getData();
     }
     
     private Node<T> first;
-    
-    /**
-     * Implementation of Node used in a stack.
-     */
-    private static class Node<T>
-    {
-        private T element;
-        private Node<T> next;
-        
-        /**
-         * Creates an empty node.
-         */
-        Node()
-        {
-            element = null;
-            next = null;
-        }
-        
-        /**
-         * Creates a node with a value.
-         * @param element the value of the node
-         */
-        Node(T element)
-        {
-            this.element = element;
-        }
-    }
 }
