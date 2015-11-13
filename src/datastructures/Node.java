@@ -1,3 +1,5 @@
+package datastructures;
+
 /**
  * Implementation of Node used in a stack.
  */
@@ -55,7 +57,7 @@ public class Node<T>
      * Retrieves next node.
      * @return next node
      */
-    Node<T> getNext()
+    Node<T> getNextNode()
     {
         return next;
     }
