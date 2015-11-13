@@ -7,9 +7,8 @@ package datastructures;
 public class AVLTree<T extends Comparable<? super T>>
         extends BinarySearchTree<T>
 {
-
     /**
-     * Creates an avl tree.
+     * Creates an empty avl tree.
      */
     public AVLTree()
     {
@@ -29,7 +28,7 @@ public class AVLTree<T extends Comparable<? super T>>
     }
 
     /**
-     * Returns the height of the node
+     * Returns the height of the node.
      * @param rNode the root of the subtree
      * @return height of rNode, if null then -1
      */
@@ -49,7 +48,7 @@ public class AVLTree<T extends Comparable<? super T>>
         if (rNode == null)
             return new BinaryNode<>(entry ,null, null);
 
-        int compareResult = entry.compareTo(rNode.element);
+        int compareResult = entry.compareTo(rNode.data);
 
         if (compareResult < 0)
             rNode.left = insert(entry, rNode.left);
@@ -71,7 +70,7 @@ public class AVLTree<T extends Comparable<? super T>>
         if (rNode == null)
             return rNode;
 
-        int compareResult = entry.compareTo(rNode.element);
+        int compareResult = entry.compareTo(rNode.data);
 
         if (compareResult < 0)
             rNode.left = remove(entry, rNode.left);
@@ -79,8 +78,8 @@ public class AVLTree<T extends Comparable<? super T>>
             rNode.right = remove(entry, rNode.right);
         else if (rNode != null && rNode.right != null)
         {
-            rNode.element = findMin(rNode.right).element;
-            rNode.right = remove(rNode.element, rNode.right);
+            rNode.data = findMin(rNode.right).data;
+            rNode.right = remove(rNode.data, rNode.right);
         }
         else
             rNode = (rNode.left != null) ? rNode.left : rNode.right;
