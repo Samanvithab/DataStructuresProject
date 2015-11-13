@@ -50,7 +50,7 @@ public class BinarySearchTree<T extends Comparable<? super T>>
      */
     public T findMin()
     {
-        return findMin(root).element;
+        return findMin(root).data;
     }
 
     /**
@@ -59,7 +59,7 @@ public class BinarySearchTree<T extends Comparable<? super T>>
      */
     public T findMax()
     {
-        return findMax(root).element;
+        return findMax(root).data;
     }
 
     /**
@@ -113,7 +113,7 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         if (rNode == null)
             return false;
 
-        int compareResult = entry.compareTo(rNode.element);
+        int compareResult = entry.compareTo(rNode.data);
 
         if (compareResult < 0)
             return contains(entry, rNode.left);
@@ -163,7 +163,7 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         if (rNode == null)
             return new BinaryNode<>(entry, null, null);
 
-        int compareResult = entry.compareTo(rNode.element);
+        int compareResult = entry.compareTo(rNode.data);
 
         if (compareResult < 0)
             rNode.left = insert(entry, rNode.left);
@@ -185,7 +185,7 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         if (rNode == null)
             return rNode;
 
-        int compareResult = entry.compareTo(rNode.element);
+        int compareResult = entry.compareTo(rNode.data);
 
         if (compareResult < 0)
             rNode.left = remove(entry, rNode.left);
@@ -193,8 +193,8 @@ public class BinarySearchTree<T extends Comparable<? super T>>
             rNode.right = remove(entry, rNode.right);
         else if (rNode != null && rNode.right != null)
         {
-            rNode.element = findMin(rNode.right).element;
-            rNode.right = remove(rNode.element, rNode.right);
+            rNode.data = findMin(rNode.right).data;
+            rNode.right = remove(rNode.data, rNode.right);
         }
         else
             rNode = (rNode.left != null) ? rNode.left : rNode.right;
@@ -210,7 +210,7 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         if (rNode != null)
         {
             printTree(rNode.left);
-            System.out.print(rNode.element + " ");
+            System.out.print(rNode.data + " ");
             printTree(rNode.right);
         }
     }
@@ -226,7 +226,7 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         while(!level.isEmpty())
         {
             BinaryNode node = level.poll();
-            System.out.print(node.element + " ");
+            System.out.print(node.data + " ");
             if (node.left != null)
                 level.add(node.left);
             if (node.right != null)
@@ -234,6 +234,10 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         }
     }
     
+    /**
+     * Returns an iterator starting from the root.
+     * @return iterator for tree
+     */
     public Iterator<T> iterator()
     {
         return new BSTIterator(root);
@@ -248,7 +252,7 @@ public class BinarySearchTree<T extends Comparable<? super T>>
     {
         /**
          * Creates a binary without children.
-         * @param entry value in node
+         * @param entry data in node
          */
         BinaryNode(T entry)
         {
@@ -257,19 +261,19 @@ public class BinarySearchTree<T extends Comparable<? super T>>
 
         /**
          * Creates a binary node with a left and right child.
-         * @param entry value in node
+         * @param entry data in node
          * @param left left child
          * @param right right child
          */
         BinaryNode(T entry, BinaryNode<T> left, BinaryNode<T> right)
         {
-            element = entry;
+            data = entry;
             this.left = left;
             this.right = right;
             height = 0;
         }
 
-        T element;
+        T data;
         BinaryNode<T> left;
         BinaryNode<T> right;
         int height = 0;
@@ -296,8 +300,8 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         }
 
         /**
-         * Checks for next element in tree.
-         * @return true if there is a next element, else false
+         * Checks for next data in tree.
+         * @return true if there is a next data, else false
          */
         public boolean hasNext()
         {
@@ -305,13 +309,13 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         }
 
         /**
-         * Returns the next element in the tree.
-         * @return the next element
+         * Returns the next data in the tree.
+         * @return the next data
          */
         public T next()
         {
             BinaryNode<T> node = stack.pop();
-            T result = node.element;
+            T result = node.data;
             if (node.right != null)
             {
                 node = node.right;
