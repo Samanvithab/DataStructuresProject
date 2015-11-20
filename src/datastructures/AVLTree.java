@@ -7,6 +7,8 @@ package datastructures;
 public class AVLTree<T extends Comparable<? super T>>
         extends BinarySearchTree<T>
 {
+    private static final int ALLOWED_IMBALANCE = 1;
+    
     /**
      * Creates an empty avl tree.
      */
@@ -172,6 +174,4 @@ public class AVLTree<T extends Comparable<? super T>>
         k1.right= rotateWithLeftChild(k1.right);
         return rotateWithRightChild(k1);
     }
-
-    private static final int ALLOWED_IMBALANCE = 1;
 }
