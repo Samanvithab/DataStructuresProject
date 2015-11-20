@@ -67,7 +67,7 @@ public class PickUpFrame extends JInternalFrame implements ChangeListener
             for (Order o : pickUpList)
             {
                 JLabel pickMeUp = new JLabel(o.toString());
-                pickMeUp.addMouseListener(new PickUpMouseListener(pickUpList, index));
+                pickMeUp.addMouseListener(new PickUpMouseListener(index));
                 pickUpPanel.add(pickMeUp);
                 index++;
             }
@@ -86,24 +86,21 @@ public class PickUpFrame extends JInternalFrame implements ChangeListener
      */
     private class PickUpMouseListener implements MouseListener
     {
-        private PickUpList list;
         private int index;
         
         /**
          * Creates a pick up mouse listener
-         * @param list list of orders to pick up
          * @param index index of order
          */
-        public PickUpMouseListener(PickUpList list, int index)
+        public PickUpMouseListener(int index)
         {
-            this.list = list;
             this.index = index;
         }
 
         @Override
         public void mouseClicked(MouseEvent me)
         {
-            list.removeOrder(index);
+            pickUpList.removeOrder(index);
         }
 
         @Override
