@@ -1,6 +1,6 @@
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
+import java.util.NoSuchElementException;
 /**
  * Implementation of Queue for use in our final project
  * Utilizes FIFO sequence for adding and removing new items
@@ -9,11 +9,6 @@ public class Queue<E> implements Iterable<E>{
 	private Node<E> first;
 	private Node<E> last;
 	private int length;
-	
-	private static class Node<E> {
-		private E element;
-		private Node<E> next;
-	}
 	
 	/**
 	 * Creates an empty queue
@@ -45,9 +40,14 @@ public class Queue<E> implements Iterable<E>{
 	 * Checks the element first in line of the queue
 	 * @return the first element
 	 */
-	public E peek() {
+	public void peek() {
 		if (isEmpty()) throw new NoSuchElementException("Queue is empty.");
-		return first.element;
+		else
+			peek(first);
+	}
+	
+	private E peek(Node<E> node) {
+		return node.getData();
 	}
 	
 	/**
@@ -57,14 +57,13 @@ public class Queue<E> implements Iterable<E>{
 	public void enqueue(E element) {
 		Node<E> secondToLast = last;
 		last = new Node<E>();
-		last.element = element;
-		last.next = null;
+		last.setData(element);
+		last.setNextNode(null);
 		
 		if (isEmpty()) first = last;
-		else secondToLast.next = last;
+		else secondToLast.setNextNode(last);
 		length++;
 	}
-	
 	
 	/**
 	 * Removes the first element into the queue
@@ -72,8 +71,14 @@ public class Queue<E> implements Iterable<E>{
 	 */
 	public E dequeue() {
 		if (isEmpty()) throw new NoSuchElementException("Queue is empty.");
-		E element = first.element;
-		first = first.next;
+		else
+			return dequeue(first);
+	}
+	
+	private E dequeue(Node<E> node) {
+		
+		E element = node.getData();
+		first = node.getNextNode();
 		length--;
 		
 		if (isEmpty()) last = null;
@@ -130,8 +135,8 @@ public class Queue<E> implements Iterable<E>{
 		 */
 		public E next() {
 			if (!hasNext()) throw new NoSuchElementException();
-			E element = current.element;
-			current = current.next;
+			E element = current.getData();
+			current = current.getNextNode();
 			return element;
 		}
 	}
