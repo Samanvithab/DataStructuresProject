@@ -1,4 +1,6 @@
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.BoxLayout;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
@@ -13,7 +15,7 @@ import javax.swing.event.ChangeListener;
 public class PickUpFrame extends JInternalFrame implements ChangeListener
 {
     private JPanel pickUpPanel;
-    private PickUpList pickUpList;
+    private final PickUpList pickUpList;
     
     /**
      * Creates an internal pick up frame with specified settings.
@@ -50,22 +52,70 @@ public class PickUpFrame extends JInternalFrame implements ChangeListener
         add(pickUpPane);
     }
     
+    /**
+     * Perform actions when state is changed
+     * @param ce change event
+     */
     @Override
     public void stateChanged(ChangeEvent ce)
     {
         pickUpPanel.removeAll();
-        
+               
         if (!pickUpList.isEmpty())
         {
+            int index = 0;
             for (Order o : pickUpList)
-                pickUpPanel.add(new JLabel(o.toString()));
+            {
+                JLabel pickMeUp = new JLabel(o.toString());
+                pickMeUp.addMouseListener(new PickUpMouseListener(pickUpList, index));
+                pickUpPanel.add(pickMeUp);
+                index++;
+            }
         }
-        else
+        else // no orders
         {
             pickUpPanel.add(new JLabel("No orders!"));
         }
         
         pickUpPanel.revalidate();
         pickUpPanel.repaint();
+    }
+    
+    /**
+     * Custom mouse listener for pick up list.
+     */
+    private class PickUpMouseListener implements MouseListener
+    {
+        private PickUpList list;
+        private int index;
+        
+        /**
+         * Creates a pick up mouse listener
+         * @param list list of orders to pick up
+         * @param index index of order
+         */
+        public PickUpMouseListener(PickUpList list, int index)
+        {
+            this.list = list;
+            this.index = index;
+        }
+
+        @Override
+        public void mouseClicked(MouseEvent me)
+        {
+            list.removeOrder(index);
+        }
+
+        @Override
+        public void mousePressed(MouseEvent me) {}
+
+        @Override
+        public void mouseReleased(MouseEvent me) {}
+
+        @Override
+        public void mouseEntered(MouseEvent me) {}
+
+        @Override
+        public void mouseExited(MouseEvent me) {}
     }
 }
