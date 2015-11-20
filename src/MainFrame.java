@@ -1,5 +1,7 @@
 
 import java.awt.Dimension;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 
@@ -8,8 +10,13 @@ import javax.swing.JFrame;
  */
 public class MainFrame extends JFrame
 {
-    private static final int PANE_WIDTH = 900;
-    private static final int PANE_HEIGHT = 500;
+    private JDesktopPane desktopPane;
+    private OrderFrame orderFrame;
+    private KitchenFrame kitchenFrame;
+    private PickUpFrame pickUpFrame;
+    
+    private static int PANE_WIDTH = 900;
+    private static int PANE_HEIGHT = 500;
     
     /**
      * Creates the main frame holding internal frames.
@@ -18,17 +25,18 @@ public class MainFrame extends JFrame
     public MainFrame(Restaurant restaurant)
     {
         // create desktop pane
-        JDesktopPane desktopPane = new JDesktopPane();
+        desktopPane = new JDesktopPane();
+        desktopPane.addComponentListener(new DesktopPaneListener());
         setContentPane(desktopPane);
         getContentPane().setPreferredSize(
                 new Dimension(PANE_WIDTH, PANE_HEIGHT));
 
         // create internal frames with size and position
-        OrderFrame orderFrame = new OrderFrame(
+        orderFrame = new OrderFrame(
                 PANE_WIDTH / 3, PANE_HEIGHT, 0, 0, restaurant);
-        KitchenFrame kitchenFrame = new KitchenFrame(
+        kitchenFrame = new KitchenFrame(
                 PANE_WIDTH / 3, PANE_HEIGHT, PANE_WIDTH / 3, 0, restaurant);
-        PickUpFrame pickUpFrame = new PickUpFrame(
+        pickUpFrame = new PickUpFrame(
                 PANE_WIDTH/3, PANE_HEIGHT, PANE_WIDTH/3*2, 0, restaurant);
         
         // attach listeners
@@ -42,9 +50,36 @@ public class MainFrame extends JFrame
         
         // set frame settings
         setTitle("Meal Ordering Simulator");
-        setResizable(false);
+        setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
         setVisible(true);
+    }  
+
+    /**
+     * Custom component listener for desktop pane.
+     */
+    private class DesktopPaneListener implements ComponentListener
+    {
+        @Override
+        public void componentResized(ComponentEvent ce)
+        {
+            // get new size
+            PANE_WIDTH = getContentPane().getWidth();
+            PANE_HEIGHT = getContentPane().getHeight();
+
+            // resize internal frames
+            orderFrame.setBounds(0, 0, PANE_WIDTH / 3, PANE_HEIGHT);
+            kitchenFrame.setBounds(PANE_WIDTH / 3, 0, PANE_WIDTH / 3, PANE_HEIGHT);
+            pickUpFrame.setBounds(PANE_WIDTH/3*2, 0, PANE_WIDTH/3, PANE_HEIGHT);
+        }
+
+        @Override
+        public void componentMoved(ComponentEvent ce) {}
+        @Override
+        public void componentShown(ComponentEvent ce) {}
+
+        @Override
+        public void componentHidden(ComponentEvent ce) {}
     }
 }
