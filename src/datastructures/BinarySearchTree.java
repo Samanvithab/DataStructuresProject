@@ -9,6 +9,8 @@ import java.util.Iterator;
  */
 public class BinarySearchTree<T extends Comparable<? super T>>
 {
+    protected BinaryNode<T> root;
+    
     /**
      * Creates an empty binary search tree.
      */
@@ -243,13 +245,16 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         return new BSTIterator(root);
     }
 
-    protected BinaryNode<T> root;
-
     /**
      * Implementation of binary node used in binary search tree.
      */
     protected static class BinaryNode<T>
     {
+        T data;
+        BinaryNode<T> left;
+        BinaryNode<T> right;
+        int height = 0;
+        
         /**
          * Creates a binary without children.
          * @param entry data in node
@@ -272,11 +277,6 @@ public class BinarySearchTree<T extends Comparable<? super T>>
             this.right = right;
             height = 0;
         }
-
-        T data;
-        BinaryNode<T> left;
-        BinaryNode<T> right;
-        int height = 0;
     }
     
     /**
@@ -284,6 +284,8 @@ public class BinarySearchTree<T extends Comparable<? super T>>
      */
     private class BSTIterator implements Iterator<T>
     {
+        Stack<BinaryNode> stack;
+                
         /**
          * Creates an iterator starting at root.
          * @param root root of tree
@@ -327,7 +329,5 @@ public class BinarySearchTree<T extends Comparable<? super T>>
             }
             return result;
         }
-        
-        Stack<BinaryNode> stack;
     }
 }
