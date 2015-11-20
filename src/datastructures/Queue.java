@@ -1,6 +1,8 @@
-import java.util.Iterator;
+package datastructures;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
+
 /**
  * Implementation of Queue for use in our final project
  * Utilizes FIFO sequence for adding and removing new items
@@ -38,14 +40,19 @@ public class Queue<E> implements Iterable<E>{
 	
 	/**
 	 * Checks the element first in line of the queue
-	 * @return the first element
+         * @return element of first node
 	 */
-	public void peek() {
+	public E peek() {
 		if (isEmpty()) throw new NoSuchElementException("Queue is empty.");
 		else
-			peek(first);
+                        return peek(first);
 	}
 	
+        /**
+         * Gets the element first in line of the queue
+         * @param node first node
+         * @return element of node
+         */
 	private E peek(Node<E> node) {
 		return node.getData();
 	}
@@ -75,6 +82,11 @@ public class Queue<E> implements Iterable<E>{
 			return dequeue(first);
 	}
 	
+        /**
+         * Removes the first element into the queue
+         * @param node first node
+         * @return element of first node
+         */
 	private E dequeue(Node<E> node) {
 		
 		E element = node.getData();
@@ -85,8 +97,10 @@ public class Queue<E> implements Iterable<E>{
 		return element;
 	}
 	
+        @Override
 	/**
 	 * Prints out the entire queue into a readable format
+         * @return list of entries in queue in order
 	 */
 	public String toString() {
 		StringBuilder str = new StringBuilder();
@@ -99,6 +113,7 @@ public class Queue<E> implements Iterable<E>{
 	@Override
 	/**
 	 * An iterator to traverse through the queue
+         * @return iterator for queue
 	 */
 	public Iterator<E> iterator() {
 		// TODO Auto-generated method stub
