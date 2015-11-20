@@ -6,6 +6,8 @@ package datastructures;
  */
 public class Stack<T>
 {
+    private Node<T> first;
+    
     /**
      * Creates an empty stack.
      */
@@ -28,29 +30,17 @@ public class Stack<T>
      * @param entry entry to add
      */
     public void push(T entry)
-    {        
-        if (isEmpty())
-            first = new Node(entry);
-        else
-        {
-            Node temp = first;
-            first = new Node(entry);
-            first.setNextNode(temp);
-        }
+    {     
+        first = push(entry, first);
     }
     
     /**
      * Removes the top entry on the stack.
-     * @return entry on top, or null is stack is empty
+     * @return data of entry on top
      */
     public T pop()
     {
-        if (isEmpty())
-            return null;
-        
-        T result = first.getData();
-        first = first.getNextNode();
-        return result;
+        return pop(first);
     }
     
     /**
@@ -65,5 +55,42 @@ public class Stack<T>
         return first.getData();
     }
     
-    private Node<T> first;
+    /**
+     * Internal method to add to stack.
+     * @param entry new entry
+     * @param topNode first node
+     * @return new first node
+     */
+    private Node push(T entry, Node topNode)
+    {
+        if (isEmpty())
+        {
+            return new Node(entry);
+        }
+        else // not empty
+        {
+            Node temp = new Node(entry);
+            temp.setNextNode(topNode);
+            return temp;
+        }
+    }
+    
+    /**
+     * Internal method to remove from stack.
+     * @param topNode first node
+     * @return data of first node or null if empty
+     */
+    private T pop(Node topNode)
+    {
+        if (isEmpty())
+        {
+            return null;
+        }
+        else // not empty
+        {
+            T result = (T) topNode.getData();
+            first = topNode.getNextNode();
+            return result;
+        }
+    }
 }
