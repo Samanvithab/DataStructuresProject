@@ -29,11 +29,8 @@ public class DoublyLinkedList<AnyType> implements Iterable<AnyType>
      */
     private void doClear( )
     {
-        head.setData(null);
-    	tail.setData(null);
-    	head.setPrevNode(null);
-    	head.setNextNode(null);
-    	head.setNextNode(tail);
+    	head = null;
+    	tail = null;
     }
    
     /**
