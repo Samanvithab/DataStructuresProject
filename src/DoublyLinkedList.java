@@ -1,5 +1,3 @@
-
-
 import java.util.Iterator;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
@@ -17,19 +15,11 @@ public class DoublyLinkedList<AnyType> implements Iterable<AnyType>
 {
     private DoublyLinkedNode<AnyType> head;
     private DoublyLinkedNode<AnyType> tail;
-//    private DoublyLinkedListIterator dl;
-    /**
-     * Construct an empty Doubly Linked List.
-     */
-    public DoublyLinkedList( )
-    {
-        doClear( );
-    }
     
     /**
      * Empties the tree.
      */
-    private void clear( )
+    public void clear( )
     {
         doClear( );
     }
@@ -37,12 +27,13 @@ public class DoublyLinkedList<AnyType> implements Iterable<AnyType>
     /**
      * Change the size of this collection to zero.
      */
-    public void doClear( )
+    private void doClear( )
     {
-//    	head = new DoublyLinkedNode<AnyType>();
-//    	tail = new DoublyLinkedNode<AnyType>();
-//    	head.setNextNode(tail);
-//    	dl = (DoublyLinkedList<AnyType>.DoublyLinkedListIterator) this.iterator();
+        head.setData(null);
+    	tail.setData(null);
+    	head.setPrevNode(null);
+    	head.setNextNode(null);
+    	head.setNextNode(tail);
     }
    
     /**
@@ -313,8 +304,8 @@ public class DoublyLinkedList<AnyType> implements Iterable<AnyType>
     
     private class DoublyLinkedListIterator implements java.util.Iterator<AnyType> 
     {
-        private DoublyLinkedNode<AnyType>  current = head; //.getNext();  // the node that is returned by next()
-        private DoublyLinkedNode lastAccessed = null;      // the last node to be returned by next()
+        private DoublyLinkedNode<AnyType>  current = head;
+        private DoublyLinkedNode lastAccessed = null;
 
         public boolean hasNext()      
         { 
