@@ -1,12 +1,12 @@
 
-import java.util.LinkedList;
+import datastructures.DoublyLinkedList;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 /**
  * List of orders to pick up.
  */
-public class PickUpList extends LinkedList<Order>
+public class PickUpList extends DoublyLinkedList<Order>
 {
     ChangeListener listener;
     
@@ -18,7 +18,7 @@ public class PickUpList extends LinkedList<Order>
     {
         if (order != null)
         {
-            add(order);
+            insertAtEnd(order);
             update();
         }
     }
