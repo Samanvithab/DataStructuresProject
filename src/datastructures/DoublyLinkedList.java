@@ -259,9 +259,9 @@ public class DoublyLinkedList<AnyType> implements Iterable<AnyType>
      * Removes an item from this Doubly linked list based on a given position
      * @return deleted node's data
      */
-    public AnyType removal(int position)
+    public AnyType remove(int position)
     {
-    	return remove(position);
+    	return removal(position);
     }
     
     /**
@@ -269,25 +269,42 @@ public class DoublyLinkedList<AnyType> implements Iterable<AnyType>
      * @param position
      * @return deleted node's data
      */
-    public AnyType remove(int position)
+    private AnyType removal(int position)
     {
         AnyType data=null;
-        System.out.println(position + " " + getSize());
         if(position == 1)
         {
             data = head.getData();
-            head = head.getNextNode();
+            if (getSize() == 1)
+            {
+                head = null;
+                tail = null;
+                
+            }
+            else if (getSize() == 2)
+            {
+                head = head.getNextNode();
+                tail = head;
+            }
+            else
+            {
+                head = head.getNextNode();
+            }
         }
         else if(position == getSize())
         {
             data = tail.getData();
             tail = tail.getPrevNode();
-            tail.setNextNode(null);
+            if (tail == head)
+            {
+                head = tail;
+            }
+                tail.setNextNode(null);
         }
         else
         {
         	DoublyLinkedNode<AnyType> temp = head;
-            for(int i = 0; i<position; i++)
+            for(int i = 1; i<position; i++)
             {
                 temp = temp.getNextNode();
             }
@@ -316,7 +333,7 @@ public class DoublyLinkedList<AnyType> implements Iterable<AnyType>
 
         public boolean hasNext()      
         { 
-        	return current !=null;
+        	return current != null;
         }
 
         public AnyType next() 
