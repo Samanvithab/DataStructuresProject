@@ -1,5 +1,6 @@
+package datastructures;
+
 import java.util.Iterator;
-import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 /**
@@ -306,7 +307,7 @@ public class DoublyLinkedList<AnyType> implements Iterable<AnyType>
 
         public boolean hasNext()      
         { 
-        	return current.getNext()!=null;
+        	return current.getNextNode()!=null;
         }
 
         public AnyType next() 
@@ -314,7 +315,7 @@ public class DoublyLinkedList<AnyType> implements Iterable<AnyType>
             if (!hasNext()) throw new NoSuchElementException();
             lastAccessed = current;
             AnyType item = current.getData();
-            current = current.getNext(); 
+            current = current.getNextNode(); 
             return item;
         }
     }
