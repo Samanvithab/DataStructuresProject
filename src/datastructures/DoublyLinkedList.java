@@ -18,6 +18,15 @@ public class DoublyLinkedList<AnyType> implements Iterable<AnyType>
     private DoublyLinkedNode<AnyType> tail;
     
     /**
+     * Creates empty list.
+     */
+    public DoublyLinkedList()
+    {
+        head = null;
+        tail = null;
+    }
+    
+    /**
      * Empties the tree.
      */
     public void clear( )
@@ -55,12 +64,11 @@ public class DoublyLinkedList<AnyType> implements Iterable<AnyType>
         {
         	count++;
         	DoublyLinkedNode<AnyType> temp = head;
-            do
+            while (temp.getNextNode() != null)
             {
                 temp = temp.getNextNode();
                 count++;
             }
-            while(temp != tail);
         }
         return count;
     }
@@ -264,6 +272,7 @@ public class DoublyLinkedList<AnyType> implements Iterable<AnyType>
     public AnyType remove(int position)
     {
         AnyType data=null;
+        System.out.println(position + " " + getSize());
         if(position == 1)
         {
             data = head.getData();
@@ -307,7 +316,7 @@ public class DoublyLinkedList<AnyType> implements Iterable<AnyType>
 
         public boolean hasNext()      
         { 
-        	return current.getNextNode()!=null;
+        	return current !=null;
         }
 
         public AnyType next() 
