@@ -1,5 +1,8 @@
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.util.ArrayList;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
@@ -8,6 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 /**
  * Internal frame to show kitchen frame.
@@ -74,7 +79,35 @@ public class KitchenFrame extends JInternalFrame implements ChangeListener
         if (!kitchen.isEmpty())
         {
             for (Order o : kitchen)
-                orderPanel.add(new JLabel(o.toString()));
+            {
+            	
+            	StringBuilder orderStr = new StringBuilder();
+        	    
+        	    ArrayList<String> order = new ArrayList<String>();
+        	    
+        	    //test
+        	    /*
+        	    order.add("Burger");
+        	    order.add("Fries");
+        	    order.add("Coke");
+        	    */
+        	    
+        	    for (int i = 0; i < order.size(); i++) {
+        	    	if (i != (order.size() - 1))
+        	    		orderStr.append(order.get(i) + ", ");
+        	    	if (i == (order.size() - 1))
+        	    		orderStr.append(order.get(i));
+        	    	
+        	    }
+        	    
+        	    JLabel newOrder = new JLabel();
+        	    newOrder.setText("<html><body>" + o.getName() + "<br>" + o.getPhoneNumber() + "<br>" +
+            			o.getBill() + "<br>" + orderStr.toString() + "</body></html>");
+        	    
+        	    newOrder.setBorder(new LineBorder(new Color(0,0,0)));
+        	    orderPanel.add(newOrder);
+        
+            }
         }
         else
         {
