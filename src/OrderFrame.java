@@ -18,7 +18,7 @@ public class OrderFrame extends JInternalFrame
      * @param yPos y position of frame
      * @param rest restaurant to order from
      */
-    public OrderFrame(int xSize, int ySize, int xPos, int yPos, Restaurant rest)
+    public OrderFrame(int xSize, int ySize, int xPos, int yPos, Restaurant rest, Order o)
     {
         super("Order", false, false, true, false);
         setSize(xSize, ySize);
@@ -27,7 +27,7 @@ public class OrderFrame extends JInternalFrame
         setVisible(true);
         
         restaurant = rest;
-        order = new Order();
+        order = o;
         createComponents();
     }
     
@@ -57,11 +57,19 @@ public class OrderFrame extends JInternalFrame
             order.setName(nameField.getText());
             order.setPhoneNumber(phoneField.getText());
             restaurant.getKitchen().addOrder(order);
-            order = new Order(); // create new order
+            //order = new Order(); // create new order (already created order is passed to this class)
         });
 
         add(welcome);
         add(inputPanel);
-        add(orderButton);
+       
+        for(Item i : order.getItemList()) {
+    		double total = i.getQuantity()*i.getPrice();
+    		inputPanel.add(new JLabel(i.getName() +  " Quantity=" + i.getQuantity() + " Total=" + total));
+    	}
+        inputPanel.add(new JLabel(" "));
+        inputPanel.add(new JLabel("Total order cost: " + order.calculateBill()));
+        
+        inputPanel.add(orderButton);
     }
 }
