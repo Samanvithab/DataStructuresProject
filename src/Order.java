@@ -6,6 +6,10 @@ public class Order
     private String phoneNumber;
     private double bill;
     private ArrayList<Item> itemList;
+    
+    public Order() {
+    	itemList = new ArrayList<Item>();
+    }
     public void setName(String name)
     {
         this.name = name;
@@ -38,5 +42,12 @@ public class Order
     
     public ArrayList<Item> getItemList() {
     	return itemList;
+    }
+    
+    public double calculateBill() {
+    	for(Item i: itemList) {
+    		bill += i.getQuantity()*i.getPrice();
+    	}
+    	return bill;
     }
 }
