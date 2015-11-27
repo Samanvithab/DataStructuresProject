@@ -1,24 +1,30 @@
 
-import java.awt.*;
+import datastructures.AVLTree;
+import datastructures.HashMap;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-
-import javax.swing.*;
+import java.util.Iterator;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JInternalFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 
 /**
- * Internal frame to show order frame.
+ * Internal frame to show menu and order.
  */
 public class MenuFrame extends JInternalFrame
 {
     private Restaurant restaurant;
     private Order order;
-	private boolean buttonClicked = false;
-	private MainFrame mainFrame;
-	JPanel inputPanel = new JPanel();
-	private int quantity;
     
     /**
      * Creates an internal order frame with specified settings.
@@ -28,132 +34,188 @@ public class MenuFrame extends JInternalFrame
      * @param yPos y position of frame
      * @param rest restaurant to order from
      */
-    public MenuFrame(int xSize, int ySize, int xPos, int yPos, Restaurant rest, MainFrame mainFrame, Order o)
+    public MenuFrame(int xSize, int ySize, int xPos, int yPos, Restaurant rest)
     {
-        super("Menu", false, false, true, false);
+        super("Order", false, false, true, false);
         setSize(xSize, ySize);
         setLocation(xPos, yPos);
-        setLayout(new FlowLayout());
+        setLayout(new BorderLayout());
         setVisible(true);
-        
+    
         restaurant = rest;
-        this.mainFrame = mainFrame;
-        order = o;
-        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.PAGE_AXIS));
-        createComponents();
+        order = new Order();
+        showMenuPanel();
     }
     
     /**
-     * Creates components in the frame.
+     * Creates components for menu panel.
      */
-    private void createComponents()
+    private void showMenuPanel()
     {
-        JLabel welcome = new JLabel("Welcome to "
+        getContentPane().removeAll();
+        
+        JLabel welcomeLabel = new JLabel("Welcome to "
                 + restaurant.getName() + "!");
+        welcomeLabel.setFont(new Font(Font.SANS_SERIF, 18, 24));
+        JButton orderButton = new JButton("Finalize Items");
         
-        File drinks = new File("src/" + "Drinks.txt");
-		JLabel d = new JLabel("Drinks");
-		inputPanel.add(d);
-		sett(drinks);
-			
-		File mainCourse = new File("src/" + "MainCourse.txt");
-		JLabel m = new JLabel("Main Course");
-		inputPanel.add(m);
-		sett(mainCourse);
-		
-        JButton orderButton = new JButton("Finalize items");
-        
+        // go to order panel
         orderButton.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		setValue(true);
-        		mainFrame.refreshOrderFrame();
-        		
+        		showOrderPanel();
         	}
         });
-       
-        this.setLayout(new BorderLayout());
-        add(welcome, BorderLayout.NORTH);
-        add(inputPanel, BorderLayout.CENTER);
+        
+        // panel for menu
+        JPanel menuPanel = new JPanel();
+        menuPanel.setBorder(new EmptyBorder(10, 0, 10, 0));
+        menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.PAGE_AXIS));
+        
+        // add each item to menu
+        for(HashMap.Entry<String, AVLTree> entry : restaurant.getMenu().getItems())
+        { 
+            // add category name
+            JPanel categoryPanel = new JPanel(new BorderLayout());
+            JLabel category = new JLabel(entry.getKey());
+            category.setFont(new Font(Font.SANS_SERIF, 18, 18));
+            categoryPanel.add(category, BorderLayout.WEST);
+            menuPanel.add(categoryPanel);
+            
+            // add each item under category
+            Iterator<Item> iter = entry.getValue().iterator();
+            while(iter.hasNext())
+            {
+                Item item = iter.next();
+                JPanel foodPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                JLabel itemLabel = new JLabel(item.getName() + ", $" + item.getPrice());
+                JButton more = new JButton("+");
+                JButton less = new JButton("-");
+                JLabel count = new JLabel(item.getQuantity() + "");
+                
+                // button listeners
+                ActionListener moreAction = new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            // add new item
+                            if (item.getQuantity() == 0)
+                                order.addItem(item);
+                            item.increment();
+                            count.setText(String.valueOf(item.getQuantity()));
+                        }
+                };
+                more.addActionListener(moreAction);
+
+                ActionListener lessAction = new ActionListener() {
+                        public void actionPerformed(ActionEvent e) {
+                            if (item.getQuantity() != 0)
+                            {
+                                item.decrement();
+                                count.setText(String.valueOf(item.getQuantity()));
+                                // remove item if quantity is 0
+                                if (item.getQuantity() == 0)
+                                    order.removeItem(item);
+                            }
+                        }
+                };
+                less.addActionListener(lessAction);
+                
+                foodPanel.add(itemLabel);
+                foodPanel.add(more);
+                foodPanel.add(less);
+                foodPanel.add(count);
+                menuPanel.add(foodPanel);
+            }
+        }
+
+        add(welcomeLabel, BorderLayout.NORTH);
+        add(new JScrollPane(menuPanel), BorderLayout.CENTER);
         add(orderButton, BorderLayout.SOUTH);
         
+        repaint();
+        revalidate();
     }
     
-    public boolean getValue() {
-    	return buttonClicked;
+    /**
+     * Creates components for order panel.
+     */
+    private void showOrderPanel()
+    {
+        getContentPane().removeAll();
+        
+        // panel and box to hold components
+        JPanel orderPanel = new JPanel();
+        Box orderBox = Box.createVerticalBox();
+        orderPanel.setLayout(new BoxLayout(orderPanel, BoxLayout.PAGE_AXIS));
+        orderPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        
+        // components
+        JLabel orderLabel = new JLabel("Order");
+        orderLabel.setFont(new Font(Font.SANS_SERIF, 18, 20));
+        JLabel infoLabel = new JLabel("Information");
+        infoLabel.setFont(new Font(Font.SANS_SERIF, 18, 20));
+        JLabel nameLabel = new JLabel("Name");
+        JLabel phoneLabel = new JLabel("Phone Number");
+        JLabel costLabel = new JLabel();
+        JTextField nameField = new JTextField(20);
+        JTextField phoneField = new JTextField(20);
+        JButton orderButton = new JButton("Place Order");
+        JButton backButton = new JButton("Go Back");
+        
+        // send order to kitchen and start new order
+        orderButton.addActionListener(event -> 
+        {
+            // send order
+            order.setName(nameField.getText());
+            order.setPhoneNumber(phoneField.getText());
+            restaurant.getKitchen().addOrder(order);
+            
+            // start new order
+            order = new Order();
+            restaurant.setMenu(MealTester.generateMenu());
+            showMenuPanel();
+        });
+        
+        // go back to menu
+        backButton.addActionListener(event -> 
+        {
+            showMenuPanel();
+        });
+        
+        // get list of items in order
+        JPanel listPanel = new JPanel();
+        listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.PAGE_AXIS));
+        for(Item i : order.getItemList())
+        {
+    		double total = i.getQuantity()*i.getPrice();
+    		listPanel.add(new JLabel(i.getName() +  " * " + i.getQuantity() + " = $" + total));
+    	} 
+        costLabel.setText("Total Cost: $" + order.calculateBill());
+        
+        nameField.setMaximumSize(new Dimension(500, 25));
+        phoneField.setMaximumSize(new Dimension(500, 25));
+        
+        // add to box
+        orderBox.add(orderLabel);
+        orderBox.add(Box.createRigidArea(new Dimension(0,10)));
+        orderBox.add(listPanel);
+        orderBox.add(Box.createRigidArea(new Dimension(0,10)));
+        orderBox.add(costLabel);
+        orderBox.add(Box.createRigidArea(new Dimension(0,30)));
+        orderBox.add(infoLabel);
+        orderBox.add(Box.createRigidArea(new Dimension(0,10)));
+        orderBox.add(nameLabel);
+        orderBox.add(nameField);
+        orderBox.add(Box.createRigidArea(new Dimension(0,10)));
+        orderBox.add(phoneLabel);
+        orderBox.add(phoneField);
+        orderBox.add(Box.createRigidArea(new Dimension(0,10)));
+        orderBox.add(orderButton);
+        orderBox.add(Box.createRigidArea(new Dimension(0,10)));
+        orderBox.add(backButton);
+        
+        orderPanel.add(orderBox);
+        add(new JScrollPane(orderPanel), BorderLayout.CENTER);
+        
+        repaint();
+        revalidate();
     }
-    
-    public void setValue(boolean b) {
-    	buttonClicked = b;
-    }
-    
-    public void sett(File food) {
-    	try {
-			Scanner in = new Scanner(food);
-			while(in.hasNextLine()) {
-				JPanel foodPanel = new JPanel();
-				foodPanel.setLayout(new FlowLayout());
-				String st = in.next();
-				double price = Double.parseDouble(in.next());
-				JLabel item = new JLabel("" + st + " $" + price);
-				JButton more = new JButton("+");
-				JButton less = new JButton("-");
-				JLabel count = new JLabel(quantity + "");
-				JButton ok = new JButton("OK");
-				foodPanel.add(item);
-				foodPanel.add(more);
-				foodPanel.add(less);
-				foodPanel.add(count);
-				foodPanel.add(ok);
-				inputPanel.add(foodPanel); 
-				
-				ActionListener moreAction = new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						quantity++;
-						count.setText(quantity + "");
-					}
-				};
-				more.addActionListener(moreAction);
-				
-				ActionListener lessAction = new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						if(quantity != 0) {
-							quantity--;
-							count.setText(quantity + "");
-						}
-					}
-				};
-				less.addActionListener(lessAction);
-				
-				ok.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						//foodPanel.remove(more);
-						//foodPanel.remove(less);
-						ok.setBackground(Color.red);
-						ok.setForeground(Color.white);
-						less.setForeground(Color.gray);
-						more.setForeground(Color.gray);
-						if(quantity != 0) {
-							order.addItem(new Item(st, price, quantity));
-							double total = price*quantity;
-							ok.setText("$"+total);
-							more.removeActionListener(moreAction);
-							less.removeActionListener(lessAction);
-							quantity = 0;
-						}
-					}
-				});
-			}
-			in.close();
-		} 
-    	catch (FileNotFoundException e) {
-			
-			System.out.println("Error found! " + e.getMessage());
-			
-			if(e instanceof FileNotFoundException)
-			{
-				System.out.println("Unable to load the file");
-			}	
-		}	
-    }
-    
 }
