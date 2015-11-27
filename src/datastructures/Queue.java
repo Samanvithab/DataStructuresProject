@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 /**
  * Implementation of Queue for use in our final project
  * Utilizes FIFO sequence for adding and removing new items
+ * @author Aidan Nyugen
  */
 public class Queue<E> implements Iterable<E>{
 	private Node<E> first;
