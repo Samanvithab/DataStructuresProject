@@ -1,4 +1,6 @@
-class HashMap<K, V> {
+import java.util.Iterator;
+
+class MyHashMap<K, V> {
      
      private Entry<K,V>[] table;   //Array of Entry.
      private int capacity= 4;  //Initial capacity of HashMap
@@ -13,10 +15,38 @@ class HashMap<K, V> {
              this.value = value;
              this.next = next;
          }
+         
+         public V getValue() {
+     		return value;
+     	}
+         public K getKey() {
+         	return key;
+     	}
+         
      }
      
-    public HashMap(){
+    public MyHashMap(){
        table = new Entry[capacity];
+    }
+    
+    public K getKey() {
+    	Entry<K, V> entr = table[0];
+		return entr.key;
+	}
+	
+    public Iterator<Entry<K, V>> getItems() {
+    	return new Iterator<Entry<K, V>>() {
+	    	int current = 0;
+	        public boolean hasNext(){
+	        	return current < table.length;
+	        }
+	        public Entry<K, V> next(){
+	        	return table[current++];
+	        }
+	        public void remove(){
+	        	throw new UnsupportedOperationException();
+	        }
+    	};
     }
  
    
@@ -129,7 +159,6 @@ class HashMap<K, V> {
      * @param key
      */
     public void display(){
-       
        for(int i=0;i<capacity;i++){
            if(table[i]!=null){
                   Entry<K, V> entry=table[i];
@@ -151,6 +180,46 @@ class HashMap<K, V> {
     private int hash(K key){
         return Math.abs(key.hashCode()) % capacity;
     }
-
+ 
+}
+ 
+ 
+/**
+ * Main class- to test HashMap functionality.
+ */
+public class Tester {
+     
+    public static void main(String[] args) {
+           MyHashMap<Integer, Integer> hashMapCustom = new MyHashMap<Integer, Integer>();
+           hashMapCustom.put(21, 12);
+           hashMapCustom.put(25, 121);
+           hashMapCustom.put(30, 151);
+           hashMapCustom.put(33, 15);
+           hashMapCustom.put(35, 89);
+ 
+           System.out.println("value corresponding to key 21="
+                        + hashMapCustom.get(21));
+           System.out.println("value corresponding to key 51="
+                        + hashMapCustom.get(51));
+ 
+           System.out.print("Displaying : ");
+           hashMapCustom.display();
+ 
+           System.out.println("\n\nvalue corresponding to key 21 removed: "
+                        + hashMapCustom.remove(21));
+           System.out.println("value corresponding to key 51 removed: "
+                        + hashMapCustom.remove(51));
+ 
+           System.out.print("Displaying : ");
+           hashMapCustom.display();
+           
+           System.out.print("---------------------- ");
+           Iterator<MyHashMap.Entry<Integer, Integer>> iterator = hashMapCustom.getItems();
+           
+           while(iterator.hasNext()){
+        	   MyHashMap.Entry<Integer, Integer> studentEntry = iterator.next();
+               System.out.println(studentEntry.getKey() +" :: "+ studentEntry.getValue());
+           }
+    }
 }
  
