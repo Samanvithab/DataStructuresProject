@@ -1,8 +1,8 @@
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JInternalFrame;
@@ -12,8 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JScrollPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import java.lang.StringBuilder;
-import java.util.ArrayList;
+import javax.swing.border.CompoundBorder;
 
 /**
  * Internal frame to show pick up frame.
@@ -49,11 +48,8 @@ public class PickUpFrame extends JInternalFrame implements ChangeListener
     private void createComponents()
     {
         // list of orders to pick up
-    	
         pickUpPanel = new JPanel();
-        
         pickUpPanel.setLayout(new BoxLayout(pickUpPanel, BoxLayout.PAGE_AXIS));
-        
         pickUpPanel.add(new JLabel("Nothing to pick up!"));
         JScrollPane pickUpPane = new JScrollPane(pickUpPanel);
         pickUpPane.setVerticalScrollBarPolicy(
@@ -73,38 +69,29 @@ public class PickUpFrame extends JInternalFrame implements ChangeListener
                
         if (!pickUpList.isEmpty())
         {
-            int index = 0;
-            for (Order o : pickUpList)
+            int index = 1; // list starts at 1
+            for (Order order : pickUpList)
             {
-            	
-            	StringBuilder orderStr = new StringBuilder();
-        	    
-        	    ArrayList<String> order = new ArrayList<String>();
-        	    
-        	    //test
-        	    /*
-        	    order.add("Burger");
-        	    order.add("Fries");
-        	    order.add("Coke");
-        	    */
-        	    
-        	    for (int i = 0; i < order.size(); i++) {
-        	    	if (i != (order.size() - 1))
-        	    		orderStr.append(order.get(i) + ", ");
-        	    	if (i == (order.size() - 1))
-        	    		orderStr.append(order.get(i));
-        	    	
-        	    }
-        	        	    
-            	
-            	JButton pickMeUp = new JButton();
-            	pickMeUp.setBorder(BorderFactory.createEmptyBorder(2,2,2,2));
-            	pickMeUp.setBorderPainted(false);
-            	pickMeUp.setContentAreaFilled(false);
-            	pickMeUp.setText("<html><body>" + o.getName() + "<br>" + o.getPhoneNumber() + "<br>" +
-            			o.getBill() + "<br>" + orderStr.toString() + "</body></html>");
+                // get list of items from order
+                String itemList = "";
+                for (Item item : order.getItemList())
+                {
+                    itemList += item.getName() + " * " + item.getQuantity() + "<br>";
+                }
+        	
+                // show order info
+                JLabel pickMeUp = new JLabel();
+                pickMeUp.setText("<html><body>" + order.getName() + "<br>" + order.getPhoneNumber() + "<br>" +
+                                 "Total Cost: $" + order.calculateBill() + "<br><br>"  + itemList + "</body></html>");
+
+                // set styles
+                pickMeUp.setOpaque(true);
+                pickMeUp.setBackground(new Color(220, 220, 220));
+                pickMeUp.setBorder(new CompoundBorder(
+                    BorderFactory.createLineBorder(Color.DARK_GRAY, 1), 
+                    BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+                
             	pickMeUp.addMouseListener(new PickUpMouseListener(index));
-            	
                 pickUpPanel.add(pickMeUp, BorderLayout.NORTH);
                 index++;
             }
