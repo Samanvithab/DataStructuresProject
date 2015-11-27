@@ -1,4 +1,0 @@
-Tacos 21.0
-Burritos 15.0
-Enchiladas 45.99
-Pizza 99.99
