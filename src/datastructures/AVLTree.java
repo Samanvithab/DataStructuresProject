@@ -3,6 +3,7 @@ package datastructures;
 /**
  * Implementation of an AVL tree.
  * Height of left and right subtree differ at most by 1.
+ * @author Katherine Soohoo
  */
 public class AVLTree<T extends Comparable<? super T>>
         extends BinarySearchTree<T>

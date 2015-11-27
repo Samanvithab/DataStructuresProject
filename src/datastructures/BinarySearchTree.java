@@ -6,6 +6,7 @@ import java.util.Iterator;
  * Implementation of a binary search tree.
  * Left subtree smaller than root. Right subtree larger than root.
  * Each node has two children.
+ * @author Katherine Soohoo
  */
 public class BinarySearchTree<T extends Comparable<? super T>>
 {
@@ -234,6 +235,20 @@ public class BinarySearchTree<T extends Comparable<? super T>>
             if (node.right != null)
                 level.add(node.right);
         }
+    }
+    
+    /**
+     * Displays the content in the tree in order.
+     * @return string of content
+     */
+    @Override
+    public String toString()
+    {
+        String output = "";
+        Iterator<T> iter = iterator();
+        while (iter.hasNext())
+            output += iter.next() + " ";
+        return output;
     }
     
     /**
