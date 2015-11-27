@@ -50,6 +50,11 @@ public class DoublyLinkedNode<AnyType>
     {
         return data;
     }
+    
+    /**
+     * Set node's data.
+     * @param data node's data
+     */
     public void setData(AnyType data) 
     {
         this.data = data;
