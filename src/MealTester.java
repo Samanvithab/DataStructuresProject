@@ -1,58 +1,57 @@
 
+import datastructures.HashMap;
 import datastructures.AVLTree;
-import datastructures.Stack;
-import java.util.Iterator;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MealTester
 {
     public static void main(String[] args)
     {
-        Restaurant restaurant = new Restaurant("Yummy Tummy");
+        Restaurant restaurant = new Restaurant("Steakhouse");
+        restaurant.setMenu(generateMenu());
         MainFrame mainFrame = new MainFrame(restaurant);
     }
     
-    public void AVLTreeTester()
+    /**
+     * Generates menu from files.
+     * @return menu with information from files
+     */
+    public static Menu generateMenu()
     {
-        AVLTree tree1 = new AVLTree<Integer>();
-        tree1.insert(20);
-        tree1.insert(15);
-        tree1.insert(10);
-        tree1.insert(5);
-        tree1.insert(7);
-        tree1.insert(9);        
-        tree1.remove(10);
-        tree1.printLevelOrder();
-        System.out.println();
+        Menu menu = new Menu();
         
-        Iterator iter = tree1.iterator();
+        // get list of files in directory
+        File menuFolder = new File("src/menu");
+        File[] fileList = menuFolder.listFiles();
         
-        while(iter.hasNext())
-            System.out.println(iter.next());
-    }
-    
-    public void HashMapTester()
-    {
-        HashMap<Integer, Integer> hashMapCustom = new HashMap<Integer, Integer>();
-        hashMapCustom.put(21, 12);
-        hashMapCustom.put(25, 121);
-        hashMapCustom.put(30, 151);
-        hashMapCustom.put(33, 15);
-        hashMapCustom.put(35, 89);
-
-        System.out.println("value corresponding to key 21="
-                     + hashMapCustom.get(21));
-        System.out.println("value corresponding to key 51="
-                     + hashMapCustom.get(51));
-
-        System.out.print("Displaying : ");
-        hashMapCustom.display();
-
-        System.out.println("\n\nvalue corresponding to key 21 removed: "
-                     + hashMapCustom.remove(21));
-        System.out.println("value corresponding to key 51 removed: "
-                     + hashMapCustom.remove(51));
-
-        System.out.print("Displaying : ");
-        hashMapCustom.display();
+        // loops through files to create categories
+        for (File food : fileList)
+        {
+            try
+            {
+                Scanner in = new Scanner(food);
+                in.useDelimiter(",|\n");
+                        
+                // loop through lines in file to add items to categories
+                AVLTree itemList = new AVLTree();
+                while (in.hasNextLine())
+                {
+                    String st = in.next();
+                    double price = Double.parseDouble(in.next());
+                    itemList.insert(new Item(st, price));
+                }
+                
+                // add list of items to menu
+                menu.addEntry(food.getName(), itemList);
+            } catch (FileNotFoundException ex)
+            {
+                Logger.getLogger(MealTester.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return menu;
     }
 }
