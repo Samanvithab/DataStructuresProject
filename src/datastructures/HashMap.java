@@ -1,9 +1,8 @@
 package datastructures;
-
 import java.util.ArrayList;
 
 /**
- * Implementation of a hash map mapping a key to a value.
+ * Implementation of a hashmap mapping a key to a value.
  * @author Samanvitha Basole
  */
 public class HashMap<K, V> {
@@ -12,6 +11,7 @@ public class HashMap<K, V> {
     private int capacity= 4;  //Initial capacity of HashMap
     
     /**
+     * Inner class for maintaining the HashMap class
      * An entry holds a key and a value.
      */
     public static class Entry<K, V> {
@@ -41,11 +41,6 @@ public class HashMap<K, V> {
         table = new Entry[capacity];
     }
     
-    public K getKey() {
-        Entry<K, V> entr = table[0];
-        return entr.key;
-    }
-    
     /**
      * Returns a list of all the entries.
      * @return list of entries
@@ -65,13 +60,8 @@ public class HashMap<K, V> {
     } 
  
      /**
-      * Method allows you put key-value pair in MyHashMap.
+      * Method allows to insert key-value pair in MyHashMap.
       * If the map already contains a mapping for the key, the old value is replaced.
-      * Note: method does not allows you to put null key though it allows null values.
-      * Implementation allows you to put custom objects as a key as well.
-      * Key Features: implementation provides you with following features:-
-      *     >provide complete functionality how to override equals method.
-      *  >provide complete functionality how to override hashCode method.
       * @param newKey key
       * @param data value
       */
@@ -165,9 +155,8 @@ public class HashMap<K, V> {
     
  
      /**
-      * Method displays all key-value pairs present in MyHashMap.,
-      * insertion order is not guaranteed, for maintaining insertion order
-      * refer LinkedMyHashMap.
+      * Method displays all key-value pairs present in MyHashMap
+      * insertion order is not guaranteed
       */
     public void display(){
         for(int i=0;i<capacity;i++){
@@ -180,11 +169,10 @@ public class HashMap<K, V> {
             }
         }             
     }
+    
      /**
       * Method implements hashing functionality, which helps in finding the appropriate
       * bucket location to store our data.
-      * This is very important method, as performance of MyHashMap is very much
-      * dependent on  this method's implementation.
       * @param key key to hash
       */
      private int hash(K key){
