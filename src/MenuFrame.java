@@ -170,7 +170,7 @@ public class MenuFrame extends JInternalFrame
             
             // start new order
             order = new Order();
-            restaurant.setMenu(MealTester.generateMenu());
+            restaurant.setMenu(Simulator.generateMenu());
             showMenuPanel();
         });
         
