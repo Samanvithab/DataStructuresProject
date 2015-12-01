@@ -310,7 +310,7 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         {
             stack = new Stack<>();
             
-            // push all left children to stack
+            // push all left node to stack
             while (theRoot != null) {
                     stack.push(theRoot);
                     theRoot = theRoot.left;
