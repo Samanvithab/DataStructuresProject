@@ -257,7 +257,7 @@ public class BinarySearchTree<T extends Comparable<? super T>>
      */
     public Iterator<T> iterator()
     {
-        return new BSTIterator(root);
+        return new BSTIterator();
     }
 
     /**
@@ -300,19 +300,20 @@ public class BinarySearchTree<T extends Comparable<? super T>>
     private class BSTIterator implements Iterator<T>
     {
         Stack<BinaryNode> stack;
+        BinaryNode theRoot = root;
                 
         /**
          * Creates an iterator starting at root.
          * @param root root of tree
          */
-        public BSTIterator(BinaryNode<T> root)
+        public BSTIterator()
         {
             stack = new Stack<>();
             
             // push all left children to stack
-            while (root != null) {
-                    stack.push(root);
-                    root = root.left;
+            while (theRoot != null) {
+                    stack.push(theRoot);
+                    theRoot = theRoot.left;
             }
         }
 
