@@ -2,7 +2,7 @@ package datastructures;
 
 /**
  * Implementation of stack using nodes.
- * FIFO: First in, first out
+ * LIFO: Last in, first out
  */
 public class Stack<T>
 {
