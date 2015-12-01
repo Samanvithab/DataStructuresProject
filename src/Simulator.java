@@ -1,5 +1,4 @@
 
-import datastructures.HashMap;
 import datastructures.AVLTree;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -49,7 +48,7 @@ public class Simulator
                 menu.addEntry(food.getName(), itemList);
             } catch (FileNotFoundException ex)
             {
-                Logger.getLogger(MealTester.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Simulator.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return menu;
